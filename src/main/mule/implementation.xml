@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	
+	<flow name="implementationFlow" doc:id="9ac42ee6-5c8a-430a-baec-f92e0e3765b2" >
+		<set-variable value='#[attributes.queryParams.extraParam]' doc:name="Set Variable " doc:id="cbf17bbd-c6ce-448d-a15d-9db75cf2e0ef" variableName="extra"/>
+		<logger level="INFO" doc:name="Logger" doc:id="695e07d0-2464-4a55-979c-809bae509e21" message="Retrieving the data from database"/>
+		<db:select doc:id="99295b3d-0b4c-4fb3-9e29-123617263f21" config-ref="Database_Config" doc:name="Selectoperation">
+			<db:sql ><![CDATA[select * from country where country=:Country;]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	Country : vars.extra
+}]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="ed06fa57-f834-4889-8df6-af8542e51972" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="993d5f81-317b-4273-b122-f5283ace39bc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

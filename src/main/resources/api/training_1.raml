@@ -1,0 +1,206 @@
+#%RAML 1.0
+title: Training_1
+mediaType: 
+- application/json
+version: v1
+description: This is a API specification creating for training purpose
+protocols:
+  
+  - HTTPS
+baseUri: www.training.com
+
+securitySchemes:
+  basicauthentication:
+    type: Basic Authentication
+    describedBy:
+      queryParameters:
+        userName:
+          type: string
+        password:
+          type: string
+
+
+  oauth:
+    type: OAuth 2.0
+    settings:
+      authorizationGrants:
+        - client_credentials
+      accessTokenUri: ""
+      authorization: ""
+
+
+
+
+securedBy:
+  basicauthentication
+
+
+
+types:
+  customer: !include customer.raml
+traits:
+  errorTrait : !include errorResponse.raml
+
+    
+
+/customer:
+  get:
+    is : [errorTrait]
+    description: Method to retrieve details
+    displayName: get customer
+    responses:
+      200: 
+        body:
+          application/json:
+            example:
+              {
+                "Name": "Hema",
+                "Address": "India",
+                "Technology": "MuleSoft"
+              }
+      400:
+        body:
+          application/json:
+            example:
+              {
+                "message" : "BAD REQUEST"
+              }
+      401:
+        body:
+          application/json:
+            example:
+              {
+                "message" : "UNAUTHONTICATED"
+              }
+
+  post:
+    description: create customer
+    displayName: created customer
+    body:
+      application/json:
+        example:
+          {
+            "Name" : "Pranav",
+            "Address" : "India"
+          }
+    responses:
+      201:
+        body:
+         application/json:
+           example:
+             {
+               "message" : " employee created"
+             }
+  patch:
+   description: update few fields
+   displayName: path customer
+   body:
+     application/json:
+      example:
+   responses:
+      204:
+      400:
+      401:
+      500:
+  put:
+    description: update all fields
+    displayName: Put customer
+    body:
+      application/json:
+       example:
+    responses:
+       204:
+       400:
+       401:
+       500:
+ 
+
+  /{customerid}:
+    get:
+      description: Method to retrieve details
+      displayName: get customer
+      queryParameters:
+        count:
+          type: number
+          description: The count of records you want to retrieve
+        createddate:
+          type: datetime
+          description: The date after which the record is created
+      responses:
+        200: 
+          body:
+            application/json:
+              type: customer
+              example: !include Customer_example.raml
+                
+        400:
+          body:
+            application/json:
+              example:
+                {
+                  "message" : "BAD REQUEST"
+                }
+        401:
+          body:
+            application/json:
+              example:
+                {
+                  "message" : "UNAUTHONTICATED"
+                }
+    delete:
+      description: delete customer
+      displayName: delete customer
+      responses:
+        204:
+        400:
+        401:
+
+  /{Managerid}:
+    
+    get:
+      description: Method to retrieve details
+      displayName: get customer
+      responses:
+        200: 
+          body:
+            application/json:
+              example: !include Customer_example.raml
+               
+        400:
+          body:
+            application/json:
+              example:
+                {
+                  "message" : "BAD REQUEST"
+                }
+        401:
+          body:
+            application/json:
+              example:
+                {
+                  "message" : "UNAUTHONTICATED"
+                }
+    delete:
+      description: delete customer
+      displayName: delete customer
+      responses:
+        204:
+        400:
+        401:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
